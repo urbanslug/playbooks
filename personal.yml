@@ -1,0 +1,7 @@
+---
+- name:          Set up a server for personal use.
+  hosts:         personal
+  remote_user:   urbanslug
+
+  roles:
+    - personal

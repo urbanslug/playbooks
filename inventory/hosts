@@ -1,0 +1,11 @@
+[digital-ocean]
+139.59.157.209
+
+[base]
+139.59.157.209 ansible_python_interpreter=/usr/bin/python2
+
+[personal]
+139.59.157.209 ansible_port=30002 ansible_user=urbanslug ansible_python_interpreter=/usr/bin/python2
+
+[webserver]
+139.59.157.209 ansible_port=30002 ansible_user=urbanslug ansible_python_interpreter=/usr/bin/python2

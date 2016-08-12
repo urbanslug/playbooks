@@ -1,0 +1,7 @@
+---
+- name:        Set up the base requirements.
+  hosts:       base
+  remote_user: root
+
+  roles:
+    - base

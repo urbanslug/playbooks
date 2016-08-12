@@ -1,0 +1,30 @@
+---
+- include_vars: vars.yml
+# we need to become for these installs.
+- name:   Install mosh.
+  pacman: pkg=mosh state=present
+
+- name:   Install zsh.
+  pacman: pkg=zsh state=present
+
+- name:   Install znc.
+  pacman: pkg=znc state=present
+
+- name: clone dotfiles
+  git:  repo=git@github.com:urbanslug/dotfiles.git
+        accept_hostkey=yes
+        clone=yes
+        dest="{{ haskell_src_dir }}"
+
+- name: clone nairobi-bot
+  git:  repo=git@github.com:nairobilug/nairobi-bot.git
+        accept_hostkey=yes
+        clone=yes
+        dest="{{ haskell_src_dir }}"
+
+
+- name: clone the blog
+  git:  repo=git@github.com:urbanslug/blog.git
+        accept_hostkey=yes
+        clone=yes
+        dest="{{ haskell_src_dir }}"

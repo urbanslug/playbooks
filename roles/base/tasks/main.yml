@@ -1,0 +1,52 @@
+---
+- include_vars: vars.yml
+
+- name:   Upgrade everything pacman -Syu
+  pacman: update_cache=yes upgrade=yes
+
+- name:   Install openssh
+  pacman: pkg=openssh state=present
+
+- name:   Install sudo
+  pacman: name=sudo state=present
+
+- name:   Install git
+  pacman: name=git state=present
+
+- name:  Add group sudo
+  group: name=sudo state=present
+
+  # did not work
+- name: Set root password
+  user: name=root password="{{root_password}}"
+
+- name: Create user urbanslug and add them to group, sudo
+  user: name=urbanslug
+        password="{{ urbanslug_password }}"
+        shell=/usr/bin/zsh
+        group=sudo
+        generate_ssh_key=yes
+        ssh_key_bits=4096
+        ssh_key_file=.ssh/id_rsa
+
+- name:     Render sshd_config template and copy it to host
+  template: src=../templates/sshd/sshd_config
+            dest=/etc/ssh/sshd_config
+            mode=0644
+            owner=root
+            group=root
+            backup=yes
+
+- name: Give sudo group sudo privileges.
+  lineinfile: dest=/etc/sudoers state=absent regexp="^# %sudo" line="%sudo   ALL=(ALL) ALL"
+
+- name:    move root authorized keys to urbanslug authorized keys.
+  command: mv /root/.ssh/authorized_keys /home/urbanslug/.ssh/authorized_keys
+
+- name: Ensure proper permissions on urbanslug ~/.ssh/authorized_keys
+  file: path=/home/urbanslug/.ssh/authorized_keys
+        owner=urbanslug
+        mode=0600
+
+- name:    Restart sshd
+  service: name=sshd state=restarted
