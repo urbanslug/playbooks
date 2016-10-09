@@ -1,1 +1,6 @@
-haskell_src_dir: /home/urbanslug/src/haskell/
+haskell_src_dir: /home/urbanslug/src/haskell
+generic_src_dir: /home/urbanslug/src/generic
+dotfiles_dir: /home/urbanslug/src/generic/dotfiles
+urbanslug_home_dir: /home/urbanslug
+zsh_dir: /home/urbanslug/.zsh
+githubuser: urbanslug

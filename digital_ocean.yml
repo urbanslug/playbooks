@@ -1,21 +1,12 @@
 ---
 - name: Convert digital ocean debian to arch
-  hosts: base
+  hosts: digital-ocean
   remote_user: root
 
   tasks:
   - name:    Fetch arch install script.
-    get_url: url=https://raw.githubusercontent.com/gh2o/digitalocean-debian-to-arch/debian8/install.sh
-             dest=/root/install.sh
+    get_url: url=https://gist.githubusercontent.com/urbanslug/19f66c6692c0057fa40cbf09c721c629/raw/3b1d6543c8b7aa911f3b6016f7bcec30aabd0298/arch_install.sh
+             dest=/root/arch_install.sh
 
-  - name: Install pip.
-    apt: name=python-pip state=present
-
-  - name: Install pexpect.
-    pip: name=pexpect state=latest
-
-  - name:   Install archlinux.
-    expect:
-      command: bash /root/install.sh
-      responses:
-        "Type \"wipe this droplet\" to continue or anything else to cancel.":  "wipe this droplet"
+  - name: Install archlinux.
+    raw:  bash /root/arch_install.sh

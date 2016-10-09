@@ -1,30 +1,66 @@
 ---
-- include_vars: vars.yml
-# we need to become for these installs.
-- name:   Install mosh.
-  pacman: pkg=mosh state=present
+- include_vars: ../vars/vault.yml
+- include_vars: ../vars/vars.yml
 
-- name:   Install zsh.
-  pacman: pkg=zsh state=present
-
+  # TO do: DRY this up.
 - name:   Install znc.
+  become:        true
+  become_user:   root
+  become_method: sudo
   pacman: pkg=znc state=present
 
+- name: install stack
+  become:        true
+  become_user:   root
+  become_method: sudo
+  pacman: pkg=stack state=present
+
+- name: install make
+  become:        true
+  become_user:   root
+  become_method: sudo
+  pacman: pkg=make state=present
+
+
 - name: clone dotfiles
-  git:  repo=git@github.com:urbanslug/dotfiles.git
-        accept_hostkey=yes
+  git:  repo="https://{{ githubuser | urlencode }}:{{ githubpassword }}@github.com/urbanslug/dotfiles.git"
         clone=yes
-        dest="{{ haskell_src_dir }}"
+        dest={{ generic_src_dir }}/dotfiles
 
 - name: clone nairobi-bot
-  git:  repo=git@github.com:nairobilug/nairobi-bot.git
-        accept_hostkey=yes
+  git:  repo="https://{{ githubuser | urlencode }}:{{ githubpassword }}@github.com/nairobilug/nairobi-bot.git"
         clone=yes
-        dest="{{ haskell_src_dir }}"
+        dest={{ haskell_src_dir }}/nairobi-bot
 
 
 - name: clone the blog
-  git:  repo=git@github.com:urbanslug/blog.git
-        accept_hostkey=yes
+  git:  repo="https://{{ githubuser | urlencode }}:{{ githubpassword }}@github.com/urbanslug/blog.git"
         clone=yes
-        dest="{{ haskell_src_dir }}"
+        dest={{ haskell_src_dir }}/blog
+
+- name: clone zsh-autosuggestions
+  git:  repo="https://{{ githubuser | urlencode }}:{{ githubpassword }}@github.com/zsh-users/zsh-autosuggestions.git"
+        clone=yes
+        dest={{ zsh_dir }}/zsh-autosuggestions
+
+- name: clone zsh-syntax-highlighting
+  git:  repo="https://{{ githubuser | urlencode }}:{{ githubpassword }}@github.com/zsh-users/zsh-syntax-highlighting.git"
+        clone=yes
+        dest={{ zsh_dir }}/zsh-syntax-highlighting
+
+# DRY this based on with_dict and with_items
+# e.g https://gist.github.com/urbanslug/a5713e70496e3e82c8bec9d32737615f
+- name: create .config
+  file: path={{ urbanslug_home_dir }}/.config
+        state=directory
+
+- name: symlink ~/.zshrc
+  file: src={{ dotfiles_dir }}/.zshrc
+        path={{ urbanslug_home_dir }}/.zshrc
+        state=link
+
+
+- name: symlink ~/.config/git
+  file: src={{ dotfiles_dir }}/.config/git
+        path={{ urbanslug_home_dir }}/.config/git
+        state=link

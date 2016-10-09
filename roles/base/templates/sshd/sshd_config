@@ -15,7 +15,7 @@ MaxAuthTries 1
 #Specify allowed users
 AllowUsers urbanslug
 
-AuthorizedKeysFile      .ssh/authorized_keys
+AuthorizedKeysFile      /home/urbanslug/.ssh/authorized_keys
 
 PasswordAuthentication no
 PermitEmptyPasswords no

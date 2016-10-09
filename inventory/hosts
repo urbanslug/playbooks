@@ -1,11 +1,20 @@
-[digital-ocean]
-139.59.157.209
+# We need to use host aliases to avoid what is described here: https://github.com/ansible/ansible/issues/4319
+digital-ocean ansible_host=138.68.77.208
+base ansible_host=138.68.77.208
+personal ansible_host=138.68.77.208
+webservers ansible_host=138.68.77.208
 
-[base]
-139.59.157.209 ansible_python_interpreter=/usr/bin/python2
+[arch]
+base
 
-[personal]
-139.59.157.209 ansible_port=30002 ansible_user=urbanslug ansible_python_interpreter=/usr/bin/python2
+[arch:vars]
+ansible_python_interpreter=/usr/bin/python2
 
-[webserver]
-139.59.157.209 ansible_port=30002 ansible_user=urbanslug ansible_python_interpreter=/usr/bin/python2
+[arch-sluggie]
+personal
+webservers
+
+[arch-sluggie:vars]
+ansible_python_interpreter=/usr/bin/python2
+ansible_port=30002
+ansible_user=urbanslug

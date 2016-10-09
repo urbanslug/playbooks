@@ -1,9 +1,9 @@
 ---
 - name: Set up web servers.
   hosts: webservers
-  remote_user: urbanslug
   become: yes
+  become_user: root
   become_method: sudo
 
   roles:
-    - webserver
+    - webservers
