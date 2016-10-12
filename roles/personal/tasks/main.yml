@@ -52,6 +52,13 @@
         path={{ urbanslug_home_dir }}/.zshrc
         state=link
 
+- name: symlink root/.zshrc
+  become: true
+  become_user: root
+  become_method: sudo
+  file: src={{ dotfiles_dir }}/.zshrc
+        path=/root/.zshrc
+        state=link
 
 - name: symlink ~/.config/git
   file: src={{ dotfiles_dir }}/.config/git

@@ -21,10 +21,6 @@
         mode=0644
         backup=yes
 
-- name: Start nginx at boot.
-  service: name=nginx enabled=yes
-
-
 - name: LetsEncrypt autpo renewal script
   copy: src=../files/certbot.service
         dest=/etc/systemd/system/certbot.service
@@ -39,6 +35,13 @@
         group=root
         mode=0644
 
+- name: Generate dhpharam.pem
+  command: openssl dhparam -out /etc/nginx/dhparam.pem 4096
+
 - name: Start certbot timer
   service: name=certbot.timer
+           enabled=yes
+
+- name: Start nginx at boot.
+  service: name=nginx
            enabled=yes
