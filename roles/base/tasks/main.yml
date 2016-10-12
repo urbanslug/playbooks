@@ -22,6 +22,12 @@
 - name:   Install sudo
   pacman: name=sudo state=present
 
+- name: install make
+  pacman: pkg=make state=present
+
+- name: install gcc
+  pacman: pkg=gcc state=present
+xx
 - name:   Install zsh
   pacman: name=zsh state=present
 

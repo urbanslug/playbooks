@@ -15,13 +15,6 @@
   become_method: sudo
   pacman: pkg=stack state=present
 
-- name: install make
-  become:        true
-  become_user:   root
-  become_method: sudo
-  pacman: pkg=make state=present
-
-
 - name: clone dotfiles
   git:  repo="https://{{ githubuser | urlencode }}:{{ githubpassword }}@github.com/urbanslug/dotfiles.git"
         clone=yes

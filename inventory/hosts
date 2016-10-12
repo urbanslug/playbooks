@@ -1,8 +1,8 @@
 # We need to use host aliases to avoid what is described here: https://github.com/ansible/ansible/issues/4319
-digital-ocean ansible_host=138.68.77.208
-base ansible_host=138.68.77.208
-personal ansible_host=138.68.77.208
-webservers ansible_host=138.68.77.208
+digital-ocean ansible_host=46.101.96.118
+base ansible_host=46.101.96.118
+personal ansible_host=46.101.96.118
+webservers ansible_host=46.101.96.118
 
 [arch]
 base
