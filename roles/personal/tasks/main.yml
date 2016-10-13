@@ -52,6 +52,11 @@
         path={{ urbanslug_home_dir }}/.zshrc
         state=link
 
+- name: symlink ~/.tmux.conf
+  file: src={{ dotfiles_dir }}/.tmux.conf
+        path={{ urbanslug_home_dir }}/.tmux.conf
+        state=link
+
 - name: symlink root/.zshrc
   become: true
   become_user: root
