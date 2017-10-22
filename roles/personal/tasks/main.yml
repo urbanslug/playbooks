@@ -1,63 +1,32 @@
 ---
-- include_vars: ../vars/vault.yml
 - include_vars: ../vars/vars.yml
 
-  # TO do: DRY this up.
-- name:   Install znc.
+- name:   Install packages
   become:        true
   become_user:   root
   become_method: sudo
-  pacman: pkg=znc state=present
+  pacman: pkg={{ item }}
+          state=present
+  with_items: "{{ packages }}"
 
-- name: install stack
-  become:        true
-  become_user:   root
-  become_method: sudo
-  pacman: pkg=stack state=present
-
-- name: clone dotfiles
-  git:  repo="https://{{ githubuser | urlencode }}:{{ githubpassword }}@github.com/urbanslug/dotfiles.git"
+- name: Clone dotfiles
+  git:  repo="https://github.com/urbanslug/dotfiles.git"
         clone=yes
-        dest={{ generic_src_dir }}/dotfiles
+        dest={{ dotfiles_dir }}
 
-- name: clone nairobi-bot
-  git:  repo="https://{{ githubuser | urlencode }}:{{ githubpassword }}@github.com/nairobilug/nairobi-bot.git"
-        clone=yes
-        dest={{ haskell_src_dir }}/nairobi-bot
-
-
-- name: clone the blog
-  git:  repo="https://{{ githubuser | urlencode }}:{{ githubpassword }}@github.com/urbanslug/blog.git"
-        clone=yes
-        dest={{ haskell_src_dir }}/blog
-
-- name: clone zsh-autosuggestions
-  git:  repo="https://{{ githubuser | urlencode }}:{{ githubpassword }}@github.com/zsh-users/zsh-autosuggestions.git"
-        clone=yes
-        dest={{ zsh_dir }}/zsh-autosuggestions
-
-- name: clone zsh-syntax-highlighting
-  git:  repo="https://{{ githubuser | urlencode }}:{{ githubpassword }}@github.com/zsh-users/zsh-syntax-highlighting.git"
-        clone=yes
-        dest={{ zsh_dir }}/zsh-syntax-highlighting
-
-# DRY this based on with_dict and with_items
-# e.g https://gist.github.com/urbanslug/a5713e70496e3e82c8bec9d32737615f
-- name: create .config
-  file: path={{ urbanslug_home_dir }}/.config
+# https://gist.github.com/urbanslug/a5713e70496e3e82c8bec9d32737615f
+- name: Ensure directories exist
+  file: path={{ item }}
         state=directory
+  with_items: "{{ dirs }}"
 
-- name: symlink ~/.zshrc
-  file: src={{ dotfiles_dir }}/.zshrc
-        path={{ urbanslug_home_dir }}/.zshrc
+- name: Ensure symlinks exist
+  file: src={{ item.key }}
+        path={{ item.value }}
         state=link
+  with_dict: "{{ symlinks }}"
 
-- name: symlink ~/.tmux.conf
-  file: src={{ dotfiles_dir }}/.tmux.conf
-        path={{ urbanslug_home_dir }}/.tmux.conf
-        state=link
-
-- name: symlink root/.zshrc
+- name: symlink /root/.zshrc
   become: true
   become_user: root
   become_method: sudo
@@ -65,7 +34,17 @@
         path=/root/.zshrc
         state=link
 
-- name: symlink ~/.config/git
-  file: src={{ dotfiles_dir }}/.config/git
-        path={{ urbanslug_home_dir }}/.config/git
-        state=link
+- name: Clone zsh-autosuggestions
+  git:  repo="https://github.com/zsh-users/zsh-autosuggestions.git"
+        clone=yes
+        dest={{ zsh_dir }}/zsh-autosuggestions
+
+- name: Clone zsh-syntax-highlighting
+  git:  repo="https://github.com/zsh-users/zsh-syntax-highlighting.git"
+        clone=yes
+        dest={{ zsh_dir }}/zsh-syntax-highlighting
+
+- name: Clone zsh-completions
+  git:  repo="https://github.com/zsh-users/zsh-completions.git"
+        clone=yes
+        dest={{ zsh_dir }}/zsh-completions

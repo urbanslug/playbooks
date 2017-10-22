@@ -1,13 +1,14 @@
 # ANSIBLE PLAYBOOK
 Pip was used to install ansible in this case.
 
-Written for arch servers. Life on the edge, stable software is overrated. :D
+Written for arch servers. Life on the edge :D
 
 In a virtualenv `pip install -r requirements/base.pip`
 
 
-### Run a playbook.
+### Run a play.
 `ansible-playbook <name-of-playbook>.yml`
+
 
 # LICENSE
 Copyright (C) 2016 - Njagi Mwaniki

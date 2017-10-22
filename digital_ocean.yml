@@ -5,8 +5,8 @@
 
   tasks:
   - name:    Fetch arch install script.
-    get_url: url=https://gist.githubusercontent.com/urbanslug/19f66c6692c0057fa40cbf09c721c629/raw/3b1d6543c8b7aa911f3b6016f7bcec30aabd0298/arch_install.sh
+    get_url: url=https://raw.githubusercontent.com/gh2o/digitalocean-debian-to-arch/debian9/install.sh
              dest=/root/arch_install.sh
 
   - name: Install archlinux.
-    raw:  bash /root/arch_install.sh
+    raw:  bash /root/arch_install.sh --i_understand_that_this_droplet_will_be_completely_wiped

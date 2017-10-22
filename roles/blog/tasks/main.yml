@@ -1,0 +1,22 @@
+---
+- include_vars:  ../vars/vars.yml
+  become:        true
+  become_user:   deploy
+  become_method: sudo
+
+- name:    Create a bare blog.git repo
+  command: "git init --bare blog.git"
+
+- name: Add a post-receive hook to update blog
+  copy: src=../files/git/hooks/post-receive
+        dest=blog.git/hooks/post-receive
+        owner=deploy
+        group=www
+        mode=0550
+        backup=yes
+
+- include:       ../../webservers/tasks/main.yml
+  become:        yes
+  become_user:   root
+  become_method: sudo
+  when:          setup_webserver|bool

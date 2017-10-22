@@ -1,20 +1,21 @@
 ---
 - include_vars: vault.yml
+- include_vars: vars.yml
 
-- name: Add "en_GB.UTF-8 UTF-8" to /etc/locale.gen
+- name: Add "en_US.UTF-8 UTF-8" to /etc/locale.gen
   lineinfile: dest=/etc/locale.gen
-              regexp="^#en_GB.UTF-8 UTF-8"
-              line="en_GB.UTF-8 UTF-8"
+              regexp="^#en_US.UTF-8 UTF-8"
+              line="en_US.UTF-8 UTF-8"
               state=present
 
-- name:  generate locales
+- name:  Generate locales
   shell: locale-gen
 
-- name: set locales
+- name: Set locales
   lineinfile: dest=/etc/locale.conf
               create=yes
               state=present
-              line="LANG=en_GB.UTF-8"
+              line="LANG=en_US.UTF-8"
 
 - name:   Upgrade everything pacman -Syu
   pacman: update_cache=yes upgrade=yes
@@ -22,12 +23,12 @@
 - name:   Install sudo
   pacman: name=sudo state=present
 
-- name: install make
+- name:   Install make
   pacman: pkg=make state=present
 
 - name: install gcc
   pacman: pkg=gcc state=present
-xx
+
 - name:   Install zsh
   pacman: name=zsh state=present
 
@@ -47,6 +48,18 @@ xx
   user: name=root
         password="{{ crypted_root_password }}"
         shell=/usr/bin/zsh
+
+- name:  Add group www
+  group: name=www state=present
+
+- name: Create deploy user
+  user: name=deploy
+        group=www
+
+- name: copy travis-ci public ssh key to deploy user
+  authorized_key: key="{{ travis_ci_pubkey }}"
+        path=/home/deploy/.ssh/authorized_keys
+        user=deploy
 
 - name: Create user urbanslug and add them to group, sudo
   user: name=urbanslug
@@ -71,7 +84,7 @@ xx
             group=root
             backup=yes
 
-- name:    move root authorized keys to urbanslug authorized keys.
+- name:    Move root authorized keys to urbanslug authorized keys.
   command: mv /root/.ssh/authorized_keys /home/urbanslug/.ssh/authorized_keys
 
 - name: Ensure proper permissions on urbanslug ~/.ssh/authorized_keys

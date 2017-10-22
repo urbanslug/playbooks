@@ -1,0 +1,21 @@
+- include_vars: ../vars/vars.yml
+
+- name:   Install packages
+  pacman: pkg={{ item }}
+          state=present
+  with_items: "{{ packages }}"
+
+- name:  Add group sudo
+  group: name=znc state=present
+
+- name: Create znc user
+  user: name=znc
+        group=znc
+        home=/var/lib/znc
+
+- name:    Start znc service at boot.
+  service: name=znc
+           enabled=yes
+
+- name:    Start znc
+  command: znc

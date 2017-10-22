@@ -1,0 +1,9 @@
+---
+- name:  Set up a server for personal use.
+  hosts: irc
+  become: yes
+  become_user: root
+  become_method: sudo
+
+  roles:
+    - irc

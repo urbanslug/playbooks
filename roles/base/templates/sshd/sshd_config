@@ -1,21 +1,14 @@
-#       $OpenBSD: sshd_config,v 1.99 2016/07/11 03:19:44 tedu Exp $
-
-# This is the sshd server system-wide configuration file.  See
-# sshd_config(5) for more information.
-
-# This sshd was compiled with PATH=/usr/bin:/bin:/usr/sbin:/sbin
-
-Port "{{ ssh_port }}"
+Port 22
 
 # Authentication:
 LoginGraceTime 1m
 PermitRootLogin no
-MaxAuthTries 1
+MaxAuthTries 3
 
 #Specify allowed users
-AllowUsers urbanslug
+AllowUsers urbanslug deploy
 
-AuthorizedKeysFile      /home/urbanslug/.ssh/authorized_keys
+AuthorizedKeysFile      %h/.ssh/authorized_keys
 
 PasswordAuthentication no
 PermitEmptyPasswords no

@@ -1,6 +1,17 @@
-haskell_src_dir: /home/urbanslug/src/haskell
-generic_src_dir: /home/urbanslug/src/generic
-dotfiles_dir: /home/urbanslug/src/generic/dotfiles
-urbanslug_home_dir: /home/urbanslug
-zsh_dir: /home/urbanslug/.zsh
-githubuser: urbanslug
+urbanslug_home_dir: "/home/urbanslug"
+dotfiles_dir: "{{ urbanslug_home_dir }}/src/generic/dotfiles"
+generic_src_dir: "{{ urbanslug_home_dir }}/src/generic"
+zsh_dir: "{{ dotfiles_dir }}/.zsh"
+
+dirs:
+  -  "{{ urbanslug_home_dir }}/.config"
+
+packages:
+  - znc
+  - python-virtualenvwrapper
+
+symlinks:
+  "{{ dotfiles_dir }}/.zsh": "{{ urbanslug_home_dir }}/.zsh"
+  "{{ dotfiles_dir }}/.zshrc": "{{ urbanslug_home_dir }}/.zshrc"
+  "{{ dotfiles_dir }}/.tmux.conf": "{{ urbanslug_home_dir }}/.tmux.conf"
+  "{{ dotfiles_dir }}/.config/git": "{{ urbanslug_home_dir }}/.config/git"

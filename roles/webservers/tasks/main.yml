@@ -1,27 +1,37 @@
-- name: install nginx
+---
+- include_vars: ../vars/vars.yml
+- include_vars: ../vars/vault.yml
+
+- name:   Install nginx
   pacman: name=nginx
           state=present
 
-- name: install certbot
+- name:   Install certbot
   pacman: name=certbot
           state=present
 
+- name:    Generate letsencrypt certs
+  command: "certbot certonly --noninteractive --agree-tos --standalone --email {{ certbot_admin_email }} -d {{ domain }} -d {{ www_domain }}"
+  args:
+    creates: "{{ certbot_output_dir }}"
+  when: generate_ssl_cert|bool
+
 - name: copy ssl_common.conf
-  copy: src=../files/ssl_common.conf
+  copy: src=../files/nginx/ssl_common.conf
         dest=/etc/nginx/ssl_common.conf
         owner=root
         group=root
         mode=0644
 
-- name: copy nginx.conf file to the host.
-  copy: src=../files/nginx.conf
+- name: Copy nginx.conf file to the host.
+  copy: src=../files/nginx/nginx.conf
         dest=/etc/nginx/nginx.conf
         owner=root
         group=root
         mode=0644
         backup=yes
 
-- name: LetsEncrypt autpo renewal script
+- name: LetsEncrypt auto renewal script
   copy: src=../files/certbot.service
         dest=/etc/systemd/system/certbot.service
         owner=root
@@ -35,13 +45,14 @@
         group=root
         mode=0644
 
-- name: Generate dhpharam.pem
+- name:    Generate dhpharam.pem
   command: openssl dhparam -out /etc/nginx/dhparam.pem 4096
+  when:    generate_ssl_cert|bool
 
-- name: Start certbot timer
+- name:    Start certbot timer
   service: name=certbot.timer
            enabled=yes
 
-- name: Start nginx at boot.
+- name:    Start nginx at boot.
   service: name=nginx
            enabled=yes

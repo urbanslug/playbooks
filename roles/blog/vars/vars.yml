@@ -1,0 +1,3 @@
+deploy_home_dir: /home/deploy
+generate_ssl_cert: False
+setup_webserver: False

@@ -1,0 +1,5 @@
+#! /bin/bash
+
+rm -rf ~/blog
+cd ~/
+git clone blog.git blog
