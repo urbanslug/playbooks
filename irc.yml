@@ -1,5 +1,5 @@
 ---
-- name:  Set up a server for personal use.
+- name:  Set up an IRC bouncer
   hosts: irc
   become: yes
   become_user: root
